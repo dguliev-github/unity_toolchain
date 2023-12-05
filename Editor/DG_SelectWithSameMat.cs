@@ -4,14 +4,9 @@ using System.Collections.Generic;
 
 public class DG_SelectWithSameMat : EditorWindow
 {
-    private Material selectedMat;
-    //[MenuItem("Tools/Select with the same mat")]
-    public static void ShowWindow()
-    {
-        EditorWindow.GetWindow(typeof(DG_SelectWithSameMat));
-    }
+    static private Material selectedMat;
    
-    public void OnGUI()
+    static public void OnGUI()
     {
         // Get the currently selected material
         selectedMat = Selection.activeObject as Material;
@@ -24,7 +19,7 @@ public class DG_SelectWithSameMat : EditorWindow
         EditorGUI.EndDisabledGroup();
     }
 
-    private void SelectMeshesWithSameMaterial()
+    static private void SelectMeshesWithSameMaterial()
     {
 
     // Collect all mesh renderers with the same material

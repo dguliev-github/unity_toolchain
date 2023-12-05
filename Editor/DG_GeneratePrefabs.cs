@@ -4,20 +4,10 @@ using System.IO;
 
 public class DG_GeneratePrefabs : EditorWindow
 {
-    //private static string saveFolder = "Assets/Prefabs/";
+    static private string saveFolder = "Assets/_Original/Prefabs/";
+    static private GameObject selectedObject;
 
-    //    [MenuItem("Tools/Generate Prefabs")]
-    //private static void ShowWindow()
-    //{
-    //    EditorWindow.GetWindow(typeof(GeneratePrefabs));
-    //}
-    private string saveFolder = "Assets/_Original/Prefabs/";
-    private GameObject selectedObject;
-    public static void ShowWindow()
-    {
-        EditorWindow.GetWindow(typeof(DG_GeneratePrefabs));
-    }
-    public void OnGUI()
+    static public void OnGUI()
     {   
 
         EditorGUILayout.HelpBox("Generate Prefabs from Selected Object's Children Meshes. Good for preparing prefab kits from single fbx file.", MessageType.Info);
@@ -30,7 +20,7 @@ public class DG_GeneratePrefabs : EditorWindow
         EditorGUI.EndDisabledGroup();
     }
 
-    private void GeneratePrefabs()
+    static private void GeneratePrefabs()
     {
         
         MeshFilter[] meshFilters = selectedObject.GetComponentsInChildren<MeshFilter>(true);

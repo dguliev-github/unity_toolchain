@@ -3,16 +3,10 @@ using UnityEngine;
 
 public class DG_SwapMaterial : EditorWindow
 {
-    private Material removeMaterial;
-    private Material replaceMaterial;
+    static private Material removeMaterial;
+    static private Material replaceMaterial;
 
-    //[MenuItem("Tools/DG_SwapMaterial")]
-    public static void ShowWindow()
-    {
-        GetWindow<DG_SwapMaterial>("DG_SwapMaterial");
-    }
-
-    public void OnGUI()
+    static public void OnGUI()
     {
         EditorGUILayout.HelpBox("Swaps first material with the second one in all selected mesh renderers. Good for making prefab variations.", MessageType.Info);
 
@@ -28,7 +22,7 @@ public class DG_SwapMaterial : EditorWindow
         EditorGUI.EndDisabledGroup();
     }
 
-    private void SwapMaterials()
+    static private void SwapMaterials()
     {
         GameObject[] selection = Selection.gameObjects;
 

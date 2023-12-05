@@ -5,14 +5,10 @@ using UnityEngine;
 using UnityEditor;
 public class DG_ReplaceWithPrefab : EditorWindow
 {
-    private GameObject[] selection;
-    private GameObject prefab;
-    //[MenuItem("Tools/DG Replace With Prefab")]
-    public static void ShowWindow()
-    {
-        EditorWindow.GetWindow<DG_ReplaceWithPrefab>();
-    }
-    public void OnGUI()
+    static private GameObject[] selection;
+    static private GameObject prefab;
+
+    static public void OnGUI()
     {   
         selection = Selection.gameObjects;
         prefab = (GameObject)EditorGUILayout.ObjectField("Prefab to replace with:", prefab, typeof(GameObject), true);
@@ -24,7 +20,7 @@ public class DG_ReplaceWithPrefab : EditorWindow
         EditorGUI.EndDisabledGroup();
     }
 
-    private void ReplaceSelected()
+    static private void ReplaceSelected()
     {
 
         for (var i = selection.Length - 1; i >= 0; --i)

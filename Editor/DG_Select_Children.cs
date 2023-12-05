@@ -4,15 +4,10 @@ using System.Collections.Generic;
 
 public class DG_Select_Children : EditorWindow
 {
-    private bool selectAllChildren = false;
-    private GameObject[] selectedObjects;
-    //[MenuItem("Tools/DG_Select_Children")]
-    public static void ShowWindow()
-    {
-        EditorWindow.GetWindow(typeof(DG_Select_Children));
-    }
+    static private bool selectAllChildren = false;
+    static private GameObject[] selectedObjects;
 
-    public void OnGUI()
+    static public void OnGUI()
     {
         EditorGUIUtility.labelWidth = 200;
         EditorGUILayout.HelpBox("Selects children of all selected parent objects", MessageType.Info);
@@ -26,7 +21,7 @@ public class DG_Select_Children : EditorWindow
         EditorGUI.EndDisabledGroup();
     }
 
-    private void SelectChildren()
+    static private void SelectChildren()
     {
         
 
@@ -49,7 +44,7 @@ public class DG_Select_Children : EditorWindow
         Selection.objects = allChildren.ToArray();
     }
 
-    private void CollectDirectChildren(Transform parent, List<GameObject> childrenList)
+    static private void CollectDirectChildren(Transform parent, List<GameObject> childrenList)
     {
         int childCount = parent.childCount;
         for (int i = 0; i < childCount; i++)
@@ -58,7 +53,7 @@ public class DG_Select_Children : EditorWindow
         }
     }
 
-    private void CollectChildrenRecursively(Transform parent, List<GameObject> childrenList)
+    static private void CollectChildrenRecursively(Transform parent, List<GameObject> childrenList)
     {
         CollectDirectChildren(parent, childrenList);
 
