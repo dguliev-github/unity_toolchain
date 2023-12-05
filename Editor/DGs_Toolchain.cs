@@ -4,7 +4,7 @@ using UnityEditor;
 public class DGs_Toolchain : EditorWindow
 {
     private int selectedToolIndex = 2;
-    private string[] toolOptions = { "Generate Prefabs", "Swap Material", "Replace with Prefab", "Select with the same Material", "Copy Transforms", "Select Children" }; //append with yourEditorScriptName
+    private string[] toolOptions = { "Generate Prefabs", "Swap Material", "Replace with Prefab", "Select with the same Material", "Copy Transforms", "Select Children", "Transfer Colliders" }; //append with yourEditorScriptName
 
     [MenuItem("Tools/DG's Toolchain")]
     private static void ShowWindow()
@@ -34,6 +34,9 @@ public class DGs_Toolchain : EditorWindow
                 break;
             case 5:
                 DG_Select_Children.OnGUI();
+                break;
+            case 6:
+                DG_Transfer_Colliders.OnGUI();
                 break;
           //case n:
           //    yourEditorScript.OnGUI();
