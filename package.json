@@ -1,7 +1,8 @@
 {
     "name": "com.gulievstudio.toolchain",
-    "version": "1.0.0",
-    "displayName": "Unity Editor Scripts",
+    "version": "1.0.1",
+    "description" : "Daily use Unity Editor Scripts consolidated into one window. Expandable.",
+    "displayName": "Unity Editor Scripts Toolchain",
     "unity": "2019.1",
    "keywords": [
       "Editor"
