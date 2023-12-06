@@ -2,42 +2,45 @@ using UnityEngine;
 using UnityEditor;
 using System.IO;
 
-public class DG_GeneratePrefabs : EditorWindow
-{
-    static private string saveFolder = "Assets/_Original/Prefabs/";
-    static private GameObject selectedObject;
-
-    static public void OnGUI()
-    {   
-
-        EditorGUILayout.HelpBox("Generate Prefabs from Selected Object's Children Meshes. Good for preparing prefab kits from single fbx file.", MessageType.Info);
-        selectedObject = Selection.activeGameObject;
-        saveFolder = EditorGUILayout.TextField("Save Folder", saveFolder);
-
-        EditorGUI.BeginDisabledGroup(selectedObject == null);
-        if (GUILayout.Button("Generate"))
-            GeneratePrefabs();
-        EditorGUI.EndDisabledGroup();
-    }
-
-    static private void GeneratePrefabs()
+namespace DG_Toolchain 
+{ 
+    public class DG_GeneratePrefabs : EditorWindow
     {
-        
-        MeshFilter[] meshFilters = selectedObject.GetComponentsInChildren<MeshFilter>(true);
+        static private string saveFolder = "Assets/_Original/Prefabs/";
+        static private GameObject selectedObject;
 
-        foreach (MeshFilter meshFilter in meshFilters)
+        static public void OnGUI()
+        {   
+
+            EditorGUILayout.HelpBox("Generate Prefabs from Selected Object's Children Meshes. Good for preparing prefab kits from single fbx file.", MessageType.Info);
+            selectedObject = Selection.activeGameObject;
+            saveFolder = EditorGUILayout.TextField("Save Folder", saveFolder);
+
+            EditorGUI.BeginDisabledGroup(selectedObject == null);
+            if (GUILayout.Button("Generate"))
+                GeneratePrefabs();
+            EditorGUI.EndDisabledGroup();
+        }
+
+        static private void GeneratePrefabs()
         {
-            GameObject parentPrefab = new GameObject(meshFilter.sharedMesh.name);
-            parentPrefab.AddComponent<MeshFilter>().sharedMesh = meshFilter.sharedMesh;
-            parentPrefab.AddComponent<MeshRenderer>().sharedMaterial = meshFilter.GetComponent<MeshRenderer>().sharedMaterial;
+        
+            MeshFilter[] meshFilters = selectedObject.GetComponentsInChildren<MeshFilter>(true);
 
-            string prefabPath = saveFolder + meshFilter.sharedMesh.name + ".prefab";
-            if (!Directory.Exists(saveFolder))
+            foreach (MeshFilter meshFilter in meshFilters)
             {
-                Directory.CreateDirectory(saveFolder);
+                GameObject parentPrefab = new GameObject(meshFilter.sharedMesh.name);
+                parentPrefab.AddComponent<MeshFilter>().sharedMesh = meshFilter.sharedMesh;
+                parentPrefab.AddComponent<MeshRenderer>().sharedMaterial = meshFilter.GetComponent<MeshRenderer>().sharedMaterial;
+
+                string prefabPath = saveFolder + meshFilter.sharedMesh.name + ".prefab";
+                if (!Directory.Exists(saveFolder))
+                {
+                    Directory.CreateDirectory(saveFolder);
+                }
+                PrefabUtility.SaveAsPrefabAsset(parentPrefab, prefabPath);
+                DestroyImmediate(parentPrefab);
             }
-            PrefabUtility.SaveAsPrefabAsset(parentPrefab, prefabPath);
-            DestroyImmediate(parentPrefab);
         }
     }
 }

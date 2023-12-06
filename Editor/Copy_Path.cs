@@ -8,29 +8,31 @@ using Object = UnityEngine.Object;
 *       SOARING STARS Lab
 *
 * ***************************************/
-
-public class Copy_Path : MonoBehaviour
+namespace DG_Toolchain
 {
-    [MenuItem("Assets/Copy Absolute Path", false, 18)]
-    private static void CopyPathToClipboard()
+    public class Copy_Path : MonoBehaviour
     {
-        Object obj = Selection.activeObject;
-        if (obj != null)
+        [MenuItem("Assets/Copy Absolute Path", false, 18)]
+        private static void CopyPathToClipboard()
         {
-
-            if (AssetDatabase.Contains(obj))
+            Object obj = Selection.activeObject;
+            if (obj != null)
             {
-                string path = AssetDatabase.GetAssetPath(obj);
 
-                path = path.TrimStart('A', 's', 's', 'e', 't');
+                if (AssetDatabase.Contains(obj))
+                {
+                    string path = AssetDatabase.GetAssetPath(obj);
 
-                path = Application.dataPath + path;
+                    path = path.TrimStart('A', 's', 's', 'e', 't');
 
-                path = path.Replace('/', '\\');
+                    path = Application.dataPath + path;
 
-                GUIUtility.systemCopyBuffer = path;
+                    path = path.Replace('/', '\\');
 
-                Debug.Log("The full path was copy to the clipboard:\n" + path);
+                    GUIUtility.systemCopyBuffer = path;
+
+                    Debug.Log("The full path was copy to the clipboard:\n" + path);
+                }
             }
         }
     }

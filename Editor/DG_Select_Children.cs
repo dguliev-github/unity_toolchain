@@ -2,68 +2,71 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 
-public class DG_Select_Children : EditorWindow
+namespace DG_Toolchain
 {
-    static private bool selectAllChildren = false;
-    static private GameObject[] selectedObjects;
-
-    static public void OnGUI()
+    public class DG_Select_Children : EditorWindow
     {
-        EditorGUIUtility.labelWidth = 200;
-        EditorGUILayout.HelpBox("Selects children of all selected parent objects", MessageType.Info);
-        selectAllChildren = EditorGUILayout.Toggle(new GUIContent("Select All Children Recursively"), selectAllChildren, GUILayout.ExpandWidth(true));
-        selectedObjects = Selection.gameObjects;
-        EditorGUI.BeginDisabledGroup(selectedObjects.Length == 0);
-        if (GUILayout.Button("Select Children"))
+        static private bool selectAllChildren = false;
+        static private GameObject[] selectedObjects;
+
+        static public void OnGUI()
         {
-            SelectChildren();
-        }
-        EditorGUI.EndDisabledGroup();
-    }
-
-    static private void SelectChildren()
-    {
-        
-
-        Undo.RecordObjects(selectedObjects, "Select Children");
-
-        List<GameObject> allChildren = new List<GameObject>();
-
-        foreach (GameObject obj in selectedObjects)
-        {
-            if (selectAllChildren)
+            EditorGUIUtility.labelWidth = 200;
+            EditorGUILayout.HelpBox("Selects children of all selected parent objects", MessageType.Info);
+            selectAllChildren = EditorGUILayout.Toggle(new GUIContent("Select All Children Recursively"), selectAllChildren, GUILayout.ExpandWidth(true));
+            selectedObjects = Selection.gameObjects;
+            EditorGUI.BeginDisabledGroup(selectedObjects.Length == 0);
+            if (GUILayout.Button("Select Children"))
             {
-                CollectChildrenRecursively(obj.transform, allChildren);
+                SelectChildren();
             }
-            else
+            EditorGUI.EndDisabledGroup();
+        }
+
+        static private void SelectChildren()
+        {
+
+
+            Undo.RecordObjects(selectedObjects, "Select Children");
+
+            List<GameObject> allChildren = new List<GameObject>();
+
+            foreach (GameObject obj in selectedObjects)
             {
-                CollectDirectChildren(obj.transform, allChildren);
+                if (selectAllChildren)
+                {
+                    CollectChildrenRecursively(obj.transform, allChildren);
+                }
+                else
+                {
+                    CollectDirectChildren(obj.transform, allChildren);
+                }
+            }
+
+            Selection.objects = allChildren.ToArray();
+        }
+
+        static private void CollectDirectChildren(Transform parent, List<GameObject> childrenList)
+        {
+            int childCount = parent.childCount;
+            for (int i = 0; i < childCount; i++)
+            {
+                childrenList.Add(parent.GetChild(i).gameObject);
             }
         }
 
-        Selection.objects = allChildren.ToArray();
-    }
-
-    static private void CollectDirectChildren(Transform parent, List<GameObject> childrenList)
-    {
-        int childCount = parent.childCount;
-        for (int i = 0; i < childCount; i++)
+        static private void CollectChildrenRecursively(Transform parent, List<GameObject> childrenList)
         {
-            childrenList.Add(parent.GetChild(i).gameObject);
-        }
-    }
+            CollectDirectChildren(parent, childrenList);
 
-    static private void CollectChildrenRecursively(Transform parent, List<GameObject> childrenList)
-    {
-        CollectDirectChildren(parent, childrenList);
-
-        int childCount = parent.childCount;
-        for (int i = 0; i < childCount; i++)
-        {
-            Transform child = parent.GetChild(i);
-            if (child.childCount > 0)
+            int childCount = parent.childCount;
+            for (int i = 0; i < childCount; i++)
             {
-                CollectChildrenRecursively(child, childrenList);
+                Transform child = parent.GetChild(i);
+                if (child.childCount > 0)
+                {
+                    CollectChildrenRecursively(child, childrenList);
+                }
             }
         }
     }

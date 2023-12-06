@@ -1,51 +1,54 @@
 using UnityEditor;
 using UnityEngine;
 
-public class DG_SwapMaterial : EditorWindow
+namespace DG_Toolchain
 {
-    static private Material removeMaterial;
-    static private Material replaceMaterial;
-
-    static public void OnGUI()
+    public class DG_SwapMaterial : EditorWindow
     {
-        EditorGUILayout.HelpBox("Swaps first material with the second one in all selected mesh renderers. Good for making prefab variations.", MessageType.Info);
+        static private Material removeMaterial;
+        static private Material replaceMaterial;
 
-        removeMaterial = EditorGUILayout.ObjectField("Material to remove:", removeMaterial, typeof(Material), false) as Material;
-        replaceMaterial = EditorGUILayout.ObjectField("Material to replace with:", replaceMaterial, typeof(Material), false) as Material;
-
-
-        EditorGUI.BeginDisabledGroup(removeMaterial == null || replaceMaterial == null);
-        if (GUILayout.Button("Swap Materials In Selected"))
+        static public void OnGUI()
         {
-            SwapMaterials();
-        }
-        EditorGUI.EndDisabledGroup();
-    }
+            EditorGUILayout.HelpBox("Swaps first material with the second one in all selected mesh renderers. Good for making prefab variations.", MessageType.Info);
 
-    static private void SwapMaterials()
-    {
-        GameObject[] selection = Selection.gameObjects;
+            removeMaterial = EditorGUILayout.ObjectField("Material to remove:", removeMaterial, typeof(Material), false) as Material;
+            replaceMaterial = EditorGUILayout.ObjectField("Material to replace with:", replaceMaterial, typeof(Material), false) as Material;
 
-        foreach (GameObject obj in selection)
-        {
-            MeshRenderer[] renderers = obj.GetComponentsInChildren<MeshRenderer>();
 
-            Undo.RecordObject(obj, "Swap Materials");
-
-            foreach (MeshRenderer renderer in renderers)
+            EditorGUI.BeginDisabledGroup(removeMaterial == null || replaceMaterial == null);
+            if (GUILayout.Button("Swap Materials In Selected"))
             {
-                SerializedObject serializedRenderer = new SerializedObject(renderer);
-                SerializedProperty materialsProperty = serializedRenderer.FindProperty("m_Materials");
+                SwapMaterials();
+            }
+            EditorGUI.EndDisabledGroup();
+        }
 
-                for (int i = 0; i < materialsProperty.arraySize; i++)
+        static private void SwapMaterials()
+        {
+            GameObject[] selection = Selection.gameObjects;
+
+            foreach (GameObject obj in selection)
+            {
+                MeshRenderer[] renderers = obj.GetComponentsInChildren<MeshRenderer>();
+
+                Undo.RecordObject(obj, "Swap Materials");
+
+                foreach (MeshRenderer renderer in renderers)
                 {
-                    if (materialsProperty.GetArrayElementAtIndex(i).objectReferenceValue == removeMaterial)
-                    {
-                        materialsProperty.GetArrayElementAtIndex(i).objectReferenceValue = replaceMaterial;
-                    }
-                }
+                    SerializedObject serializedRenderer = new SerializedObject(renderer);
+                    SerializedProperty materialsProperty = serializedRenderer.FindProperty("m_Materials");
 
-                serializedRenderer.ApplyModifiedProperties();
+                    for (int i = 0; i < materialsProperty.arraySize; i++)
+                    {
+                        if (materialsProperty.GetArrayElementAtIndex(i).objectReferenceValue == removeMaterial)
+                        {
+                            materialsProperty.GetArrayElementAtIndex(i).objectReferenceValue = replaceMaterial;
+                        }
+                    }
+
+                    serializedRenderer.ApplyModifiedProperties();
+                }
             }
         }
     }
