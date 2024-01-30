@@ -112,13 +112,21 @@ You have an fbx file with hierarchy like that:
  This script allows you to re-setup LOD groups and then generate independent prefabs with ease.
 
 ## Set LOD Transitions
-![image](https://github.com/dguliev-github/unity_toolchain/assets/64034875/5a5396d9-9cb4-46f0-a9ef-5d9ade84f102)
+![image](https://github.com/dguliev-github/unity_toolchain/assets/64034875/e8109609-8923-421b-a353-97569fa0bc48)
 
-Automatically sets LOD transition value by interpolating between LOD0 and last LOD value. Useful when LOD count between objects is inconsistent but you need them to cull on the exact same distance or screen height percent.
+The first button automatically sets LOD transition value by interpolating between LOD0 and last LOD value. Useful when LOD count between objects is inconsistent but you need them to cull on the exact same distance or screen height percent.
+
+The second button sets fade transition weight for all selected objects with LOD groups. Basically this function extends built-it LODGroup multiobject editor with this missing feature. 
+
+![image](https://github.com/dguliev-github/unity_toolchain/assets/64034875/4369d340-6f0d-4334-9281-ee6da40d435b)
+
+By choosing Animate checkbox you can override cross-fade animation length in seconds. Note that this variable is shared between all LODgroups in project.
 
 **Requirements**
 
 Select gameobjects with the LOD Group components and set LOD0 transition percent and the last LOD transition percent. The first value should be bigger than the second. 
+
+Fade Animation Time value should be positive. 
 
 **Note**
 
